@@ -83,8 +83,20 @@ public class NavigationBarColorModule extends ReactContextBaseJavaModule {
 
                         });
                         colorAnimation.start();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && light) {
-                            getCurrentActivity().getWindow().addFlags(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            if (light) {
+                                getCurrentActivity().getWindow().getDecorView().setSystemUiVisibility(
+                                        WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+                                                | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                                );
+                            } else {
+                                View view = getCurrentActivity().getWindow().getDecorView();
+                                // remove light flag
+                                view.setSystemUiVisibility(
+                                    view.getWindowSystemUiVisibility()
+                                    ^ View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                                );
+                            }
 
                         }
                     } else {
